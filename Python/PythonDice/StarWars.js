@@ -26,6 +26,39 @@ const midPoint = shuffledDeck.length / 2;
 const rebels = shuffledDeck.slice(0, midPoint);
 const empires = shuffledDeck.slice(midPoint);
 
+function war(rebels, empires, spoils) {
+    if (rebels.length < 4) {
+        throw "All Rebels eliminated!";
+
+        return;
+    }
+
+    if (empires.length < 4) {
+        throw "The Empire is gone!";
+
+        return;
+    }
+
+    const rebelSpoils = rebels.splice(0,3);
+    const empireSpoils = empires.splice(0,3);
+
+    const rebelWarCard = rebels.shift();
+    const empireWarCard = empires.shift();
+
+    spoils = [...spoils, ...rebelSpoils, ...empireSpoils, rebelWarCard, empireWarCard];
+
+    if (rebelWarCard.rank > empireWarCard.rank) {
+        console.log("\n=====================\Rebel win the War\n=====================\n");
+        rebels.push(...spoils);
+    } else if (rebelWarCard.rank < empireWarCard.rank) {
+        console.log("\n=====================\Empire win the War\n=====================\n");
+        empires.push(...spoils);
+    } else {
+        console.log("\n=====================\nWAR CONTINUES\n=====================\n");
+        war(rebels, empires, spoils);
+    }
+}
+
 // TODO: Write logic to shift card from each players deck and distribute both cards to winner
 function battle(rebels, empires, battleNumber = 1) {
     const rebelBattleCard = rebels.shift()
@@ -36,26 +69,8 @@ function battle(rebels, empires, battleNumber = 1) {
     console.log("The Empire throws " + empireBattleCard.rank + " of " + empireBattleCard.suit)
 
     if (rebelBattleCard.rank == empireBattleCard.rank) {
-        //function greatBattle (rebels, empires, battleNumber = 1, holderArr) {
-            holderArr = []
-            holderArr.push(rebelBattleCard, empireBattleCard, rebels.splice(0,3), empires.splice(0,3))
-            
-            console.log(holderArr)
-            console.log(rebelBattleCard)
-            console.log(empireBattleCard)
-            
-            if (rebelBattleCard.rank > empireBattleCard.rank) {
-                rebels.push(holderArr, rebelBattleCard, empireBattleCard)
-                console.log('The Rebel Scum won the great battle #' + battleNumber)
-            } else if (rebelBattleCard.rank < empireBattleCard.rank) {
-                empires.push(holderArr, rebelBattleCard, empireBattleCard)
-                console.log('The Evil Empire won the great battle #' + battleNumber)
-            } else {
-                empires.push(holderArr, rebelBattleCard, empireBattleCard)
-                //greatBattle(rebels, empires, battleNumber = 1, holderArr)
-            }
-        //}
-        
+        console.log("war begins")
+        war(rebels, empires, [rebelBattleCard, empireBattleCard]);
     } else if (rebelBattleCard.rank > empireBattleCard.rank) {
         rebels.push(rebelBattleCard, empireBattleCard)
         console.log('The Rebel Scum won battle #' + battleNumber)
@@ -69,11 +84,8 @@ function battle(rebels, empires, battleNumber = 1) {
     console.log("================================")
 }
 
-
-
-
 // TODO: repeat draw logic until one players deck is empty
-function starWars(rebels, empires, maxBattles = 20) {
+function starWars(rebels, empires, maxBattles = 500) {
     let currentBattle = 0;
 
     while(rebels.length > 0 && empires.length > 0 && currentBattle++ < maxBattles) {
@@ -92,4 +104,8 @@ function starWars(rebels, empires, maxBattles = 20) {
 }
 
 // 4. Play
-console.log(starWars(rebels, empires));
+try {
+    console.log(starWars(rebels, empires));
+} catch (e) {
+    console.error(e);
+}
