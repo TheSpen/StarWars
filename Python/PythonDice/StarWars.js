@@ -35,7 +35,28 @@ function battle(rebels, empires, battleNumber = 1) {
     console.log("The Rebels throw " + rebelBattleCard.rank + " of " + rebelBattleCard.suit)
     console.log("The Empire throws " + empireBattleCard.rank + " of " + empireBattleCard.suit)
 
-    if (rebelBattleCard.rank > empireBattleCard.rank) {
+    if (rebelBattleCard.rank == empireBattleCard.rank) {
+        //function greatBattle (rebels, empires, battleNumber = 1, holderArr) {
+            holderArr = []
+            holderArr.push(rebelBattleCard, empireBattleCard, rebels.splice(0,3), empires.splice(0,3))
+            
+            console.log(holderArr)
+            console.log(rebelBattleCard)
+            console.log(empireBattleCard)
+            
+            if (rebelBattleCard.rank > empireBattleCard.rank) {
+                rebels.push(holderArr, rebelBattleCard, empireBattleCard)
+                console.log('The Rebel Scum won the great battle #' + battleNumber)
+            } else if (rebelBattleCard.rank < empireBattleCard.rank) {
+                empires.push(holderArr, rebelBattleCard, empireBattleCard)
+                console.log('The Evil Empire won the great battle #' + battleNumber)
+            } else {
+                empires.push(holderArr, rebelBattleCard, empireBattleCard)
+                //greatBattle(rebels, empires, battleNumber = 1, holderArr)
+            }
+        //}
+        
+    } else if (rebelBattleCard.rank > empireBattleCard.rank) {
         rebels.push(rebelBattleCard, empireBattleCard)
         console.log('The Rebel Scum won battle #' + battleNumber)
     } else {
@@ -48,8 +69,11 @@ function battle(rebels, empires, battleNumber = 1) {
     console.log("================================")
 }
 
+
+
+
 // TODO: repeat draw logic until one players deck is empty
-function starWars(rebels, empires, maxBattles = 10) {
+function starWars(rebels, empires, maxBattles = 20) {
     let currentBattle = 0;
 
     while(rebels.length > 0 && empires.length > 0 && currentBattle++ < maxBattles) {
